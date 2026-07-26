@@ -1,11 +1,15 @@
 ---
-import '../styles/global.css'
+import '../styles/global.css';
 
 interface Props {
-    title?: string;
+	title?: string;
+	description?: string;
 }
 
-const { title = 'Print Shop' } = Astro.props;
+const {
+	title = 'Print Shop',
+	description = 'Generate it. Print it. Get paid. The AI design marketplace for stickers, mugs, tees and posters.',
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -16,10 +20,16 @@ const { title = 'Print Shop' } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400;500;600;700&display=swap"
+		/>
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+	<body class="min-h-screen overflow-x-clip bg-paper font-sans text-ink antialiased">
 		<slot />
 	</body>
 </html>
-

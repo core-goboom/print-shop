@@ -1,1 +1,123 @@
 @import 'tailwindcss';
+
+/* ───────────────────────────────────────────────────────────
+   Print Shop — "Risograph Workshop" design language
+   Warm paper, fluorescent riso inks, sticker-cards with hard
+   offset shadows, halftone texture. Config-less Tailwind v4:
+   tokens below generate utilities (bg-coral, font-display, …).
+   ─────────────────────────────────────────────────────────── */
+@theme {
+	--color-paper: #f6efdf;
+	--color-paper-2: #efe4cd;
+	--color-ink: #17140e;
+
+	--color-coral: #ff5436;
+	--color-blue: #2f4bff;
+	--color-pink: #ff4f9a;
+	--color-yellow: #ffce3a;
+	--color-lime: #b6e84f;
+	--color-violet: #7b4dff;
+	--color-teal: #16c6a4;
+
+	--font-display: 'Bricolage Grotesque', 'Arial Black', system-ui, sans-serif;
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+	--shadow-pop: 4px 4px 0 0 var(--color-ink);
+	--shadow-pop-lg: 7px 7px 0 0 var(--color-ink);
+	--shadow-pop-xl: 12px 12px 0 0 var(--color-ink);
+}
+
+/* Halftone dot texture — set `color` to tint the dots, wrap in
+   an element with low opacity for a printed-screen feel. */
+@utility halftone {
+	background-image: radial-gradient(currentColor 1.4px, transparent 1.6px);
+	background-size: 9px 9px;
+}
+
+/* Sticker card: thick ink border + hard offset shadow. */
+@utility sticker {
+	border: 2px solid var(--color-ink);
+	box-shadow: var(--shadow-pop);
+	background-color: white;
+}
+
+/* Marquee ticker for the stats / "as printed" bands. */
+@keyframes ps-marquee {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+.animate-marquee {
+	animation: ps-marquee 32s linear infinite;
+}
+
+/* Risograph misregistration — an offset second-ink ghost behind ink
+   headings. em-based so it scales with any font size. */
+@utility misregister {
+	text-shadow: 0.05em 0.045em 0 var(--color-coral);
+}
+@utility misregister-blue {
+	text-shadow: 0.05em 0.045em 0 var(--color-blue);
+}
+
+/* Design tile: rotation lives in a CSS var so the hover lift composes
+   with it (an inline `transform` would otherwise clobber the hover). */
+.design-tilt {
+	transform: rotate(var(--rot, 0deg));
+	transition:
+		transform 0.22s ease,
+		box-shadow 0.22s ease;
+	will-change: transform;
+}
+.design-tilt:hover {
+	transform: rotate(var(--rot, 0deg)) translateY(-6px) scale(1.015);
+	box-shadow: var(--shadow-pop-lg);
+}
+
+/* Scroll-in reveal — only where supported AND motion is welcome, so an
+   unsupported browser never gets stuck on opacity:0. */
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		@keyframes ps-reveal {
+			from {
+				opacity: 0;
+				transform: translateY(28px);
+			}
+			to {
+				opacity: 1;
+				transform: none;
+			}
+		}
+		.reveal {
+			animation: ps-reveal both linear;
+			animation-timeline: view();
+			animation-range: entry 0% entry 55%;
+		}
+	}
+}
+
+/* Paper grain — a fixed fractal-noise screen over the whole page. */
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 60;
+	pointer-events: none;
+	opacity: 0.05;
+	mix-blend-mode: multiply;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Respect reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+	.animate-marquee {
+		animation: none;
+	}
+	.design-tilt,
+	.design-tilt:hover {
+		transform: none;
+	}
+}
