@@ -1,0 +1,14 @@
+---
+interface props {
+    tone?: 'ink' | 'paper';
+}
+
+const { tone = 'ink' } = Astro.props;
+const border = tone === 'ink'  ? 'border-ink' : 'border-paper';
+const shadow = tone === 'ink' ? 'shadow-pop' : '';
+---
+
+<a href="/" class="flex items-center gap-2.5" aria-label="Print Shop home">
+	<span class={`grid h-9 w-9 place-items-center rounded-lg border-2 ${border} bg-coral text-lg font-black text-white ${shadow}`}>P</span>
+	<span class="font-display text-xl font-extrabold tracking-tight">Print&nbsp;Shop</span>
+</a>
