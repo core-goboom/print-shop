@@ -1,8 +1,248 @@
 ---
 import PublicLayout from '../layouts/PublicLayout.astro';
+
+const stats = ['12,480 designs', '3,800 makers', '$48,200 paid to designers', '9 products', '61k prints shipped', '4.9★ avg rating'];
+
+const filters = ['Trending', 'New', 'Stickers', 'Tees', 'Mugs', 'Posters', 'Under 40 cr'];
+
+const steps = [
+	{
+		n: '01',
+		color: 'bg-coral',
+		title: 'Prompt it',
+		body: 'Describe anything — “grumpy space cat”, “riso sunset”. Our AI turns words into print-ready art in seconds.',
+	},
+	{
+		n: '02',
+		color: 'bg-blue',
+		title: 'Publish it',
+		body: 'Drop your design in the gallery and choose which products it sells on: stickers, mugs, tees, posters.',
+	},
+	{
+		n: '03',
+		color: 'bg-lime',
+		title: 'Get paid',
+		body: 'Earn credits every time someone prints your design. Cash out, or remix them into your next drop.',
+	},
+];
+
+const products = [
+	{ name: 'Stickers', price: 'from $4', color: '#ff5436', icon: 'sticker' },
+	{ name: 'Mugs', price: 'from $14', color: '#2f4bff', icon: 'mug' },
+	{ name: 'Tees', price: 'from $24', color: '#ff4f9a', icon: 'tee' },
+	{ name: 'Posters', price: 'from $18', color: '#16c6a4', icon: 'poster' },
+] as const;
+
+const quotes = [
+	{
+		text: 'Sold 200 sticker packs in a weekend. I literally just typed “grumpy space cat.”',
+		maker: 'zaptastic',
+		tag: 'Top seller',
+		color: 'bg-yellow',
+	},
+	{
+		text: 'The gallery is my mood board and my paycheck at the same time.',
+		maker: 'florafuzz',
+		tag: 'Maker of the month',
+		color: 'bg-lime',
+	},
+	{
+		text: 'Went from doodles to a full poster line without ever owning a printer.',
+		maker: 'duskdraws',
+		tag: 'Rising star',
+		color: 'bg-pink',
+	},
+];
+
+// 12-point starburst outline for the "fresh ink" sticker accent.
+const burst = Array.from({ length: 24 }, (_, i) => {
+	const a = (i / 24) * Math.PI * 2 - Math.PI / 2;
+	const r = i % 2 === 0 ? 48 : 37;
+	return `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)}`;
+}).join(' ');
 ---
 
-<PublicLayout title="Awesome Shop">
-	<h1 class="text-3xl font-semibold text-slate-900">Awesome Shop</h1>
-	<p class="mt-2 text-slate-600">Setup is working.</p>
+<PublicLayout title="Print Shop — generate it, print it, get paid">
+	<!-- ── Hero ───────────────────────────────────────────── -->
+	<section class="relative overflow-hidden border-b-2 border-ink">
+		<div class="halftone pointer-events-none absolute inset-0 text-coral opacity-[0.08]"></div>
+		<div class="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.05fr_1fr] lg:py-24">
+			<div>
+				<span class="sticker inline-flex items-center gap-2 rounded-full bg-yellow px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide">
+					<span class="h-2 w-2 rounded-full bg-coral"></span> AI design marketplace
+				</span>
+				<h1 class="misregister mt-5 text-balance font-display text-5xl font-extrabold leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
+					Turn a prompt into a <span class="misregister-blue text-coral">print.</span>
+				</h1>
+				<p class="mt-5 max-w-md text-lg text-ink/70">
+					Generate art with AI, publish it to the gallery, and sell it on stickers, mugs, tees and posters. Makers keep the credits — every single
+					print.
+				</p>
+				<div class="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+					<a
+						href="/signup"
+						class="sticker rounded-full bg-coral px-6 py-3.5 text-center font-display text-base font-bold text-white shadow-pop-lg transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-pop"
+					>
+						Generate a design →
+					</a>
+					<a
+						href="/browse"
+						class="sticker rounded-full bg-white px-6 py-3.5 text-center font-display text-base font-bold transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
+					>
+						Browse the gallery
+					</a>
+				</div>
+				<p class="mt-5 text-sm font-medium text-ink/55">Free to start · 25 credits on the house · No card required</p>
+			</div>
+
+			<!-- Hero collage: a "contact sheet" of designs -->
+			<div class="relative">
+				<!-- peeking "fresh ink" starburst sticker -->
+				<div class="absolute -right-4 -top-6 z-10 hidden rotate-12 sm:block">
+					<div class="relative grid h-24 w-24 place-items-center drop-shadow-[3px_3px_0_rgba(23,20,14,1)]">
+						<svg viewBox="0 0 100 100" class="absolute inset-0 h-full w-full">
+							<polygon points={burst} fill="#ffce3a" stroke="#17140e" stroke-width="3" stroke-linejoin="round"></polygon>
+						</svg>
+						<span class="relative font-display text-[11px] font-black uppercase leading-tight text-ink -rotate-6">Fresh<br />ink</span>
+					</div>
+				</div>
+				<div class="sticker rounded-3xl bg-paper-2 p-4 shadow-pop-xl">
+					<div class="mb-3 flex items-center justify-between px-1">
+						<span class="font-mono text-xs font-bold uppercase tracking-widest text-ink/60">fresh off the press</span>
+						<span class="flex gap-1.5">
+							<span class="h-3 w-3 rounded-full bg-coral"></span>
+							<span class="h-3 w-3 rounded-full bg-blue"></span>
+							<span class="h-3 w-3 rounded-full bg-lime"></span>
+						</span>
+					</div>
+					<div class="grid grid-cols-2 gap-4">placeholder</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Stats ticker -->
+		<div class="overflow-hidden border-t-2 border-ink bg-ink py-3 text-paper">
+			<div class="flex w-max animate-marquee gap-10 whitespace-nowrap font-display text-sm font-bold uppercase tracking-wide">placeholder</div>
+		</div>
+	</section>
+
+	<!-- ── Featured designs ───────────────────────────────── -->
+	<section class="mx-auto max-w-6xl px-5 py-20 lg:py-28">
+		<div class="reveal flex flex-wrap items-end justify-between gap-4">
+			<div>
+				<h2 class="misregister font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Fresh from the gallery</h2>
+				<p class="mt-3 text-ink/65">Community-made, AI-generated, ready to print.</p>
+			</div>
+			<a href="/browse" class="font-display font-bold text-coral hover:underline">See all designs →</a>
+		</div>
+
+		<div class="mt-7 flex flex-wrap gap-2.5">
+			{
+				filters.map((f, i) => (
+					<button
+						class={`sticker rounded-full px-4 py-2 text-sm font-bold transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none ${i === 0 ? 'bg-ink text-paper' : 'bg-white'}`}
+					>
+						{f}
+					</button>
+				))
+			}
+		</div>
+
+		<div class="mt-9 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">placeholder</div>
+	</section>
+
+	<!-- ── Product types ──────────────────────────────────── -->
+	<section class="border-y-2 border-ink bg-blue text-paper">
+		<div class="reveal mx-auto max-w-6xl px-5 py-20 lg:py-28">
+			<h2 class="max-w-2xl font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
+				One design. <span class="text-yellow">Every</span> product.
+			</h2>
+			<p class="mt-3 max-w-xl text-paper/75">Pick any design and slap it on whatever you want. Real prints, shipped to your door.</p>
+
+			<div class="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
+				{
+					products.map(p => (
+						<div class="sticker rounded-2xl bg-paper p-5 text-ink transition-all hover:-translate-y-1 hover:rotate-1 active:translate-y-0">
+							<div class="grid h-16 w-16 place-items-center rounded-xl border-2 border-ink text-white" style={`background:${p.color};`}>
+								placeholder
+							</div>
+							<h3 class="mt-4 font-display text-xl font-bold">{p.name}</h3>
+							<p class="mt-1 text-sm font-semibold text-ink/55">{p.price}</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<!-- ── How it works ───────────────────────────────────── -->
+	<section class="mx-auto max-w-6xl px-5 py-20 lg:py-28">
+		<div class="reveal text-center">
+			<span class="font-mono text-xs font-bold uppercase tracking-widest text-ink/55">From prompt to payout</span>
+			<h2 class="misregister mt-2 font-display text-4xl font-extrabold tracking-tight sm:text-5xl">How it works</h2>
+		</div>
+		<div class="reveal mt-12 grid gap-6 md:grid-cols-3">
+			{
+				steps.map(s => (
+					<div class="sticker rounded-2xl bg-white p-7">
+						<div class={`grid h-14 w-14 place-items-center rounded-xl border-2 border-ink font-display text-xl font-black text-white ${s.color}`}>
+							{s.n}
+						</div>
+						<h3 class="mt-5 font-display text-2xl font-bold">{s.title}</h3>
+						<p class="mt-2 text-ink/70">{s.body}</p>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<!-- ── Maker quotes ───────────────────────────────────── -->
+	<section class="border-y-2 border-ink bg-paper-2">
+		<div class="mx-auto max-w-6xl px-5 py-20 lg:py-28">
+			<h2 class="misregister font-display text-4xl font-extrabold tracking-tight sm:text-5xl">Makers are eating good</h2>
+			<div class="reveal mt-10 grid gap-6 md:grid-cols-3">
+				{
+					quotes.map(q => (
+						<figure class="sticker flex flex-col rounded-2xl bg-white p-6">
+							<span class={`${q.color} self-start rounded-full border-2 border-ink px-3 py-1 text-xs font-bold uppercase tracking-wide`}>
+								{q.tag}
+							</span>
+							<blockquote class="mt-4 font-display text-xl font-semibold leading-snug">“{q.text}”</blockquote>
+							<figcaption class="mt-5 flex items-center gap-3">
+								<span class="grid h-10 w-10 place-items-center rounded-full border-2 border-ink bg-violet font-bold text-white">
+									{q.maker[0].toUpperCase()}
+								</span>
+								<span class="font-semibold">@{q.maker}</span>
+							</figcaption>
+						</figure>
+					))
+				}
+			</div>
+		</div>
+	</section>
+
+	<!-- ── CTA band ───────────────────────────────────────── -->
+	<section class="relative overflow-hidden bg-coral text-white">
+		<div class="halftone pointer-events-none absolute inset-0 text-ink opacity-[0.12]"></div>
+		<div class="reveal relative mx-auto max-w-3xl px-5 py-24 text-center">
+			<h2 class="misregister-blue font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">Your first design is on us.</h2>
+			<p class="mx-auto mt-4 max-w-md text-lg text-white/85">
+				Sign up and get 25 free credits — enough to generate, publish, and print your first idea today.
+			</p>
+			<form class="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row">
+				<input
+					type="email"
+					placeholder="you@email.com"
+					class="sticker w-full rounded-full bg-white px-5 py-3.5 font-semibold text-ink placeholder:text-ink/40 focus:outline-none"
+				/>
+				<button
+					type="button"
+					class="sticker shrink-0 rounded-full bg-ink px-6 py-3.5 font-display font-bold text-paper transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
+				>
+					Claim credits
+				</button>
+			</form>
+			<p class="mt-4 text-sm text-white/70">No card required · Cancel anytime · It’s a teaching demo 😉</p>
+		</div>
+	</section>
 </PublicLayout>

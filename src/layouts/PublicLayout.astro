@@ -19,18 +19,17 @@ const path = Astro.url.pathname;
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
+	<!-- ── Header ─────────────────────────────────────────── -->
 	<header class="sticky top-0 z-50 border-b-2 border-ink bg-paper/90 backdrop-blur">
+		<input type="checkbox" id="nav-toggle" class="peer/nav sr-only" aria-label="Toggle menu" />
 		<div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
 			<Logo />
 
 			<nav class="hidden items-center gap-7 text-sm font-semibold md:flex">
 				{
 					nav.map(item => (
-						<a
-							href={item.href}
-							class={`transition-colors hover:text-coral ${isActive(item.href) ? 'text-coral' : ''}`}
-						>
+						<a href={item.href} class={`transition-colors hover:text-coral ${isActive(item.href) ? 'text-coral' : ''}`}>
 							{item.label}
 						</a>
 					))
@@ -52,20 +51,105 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						aria-hidden="true"
-						><circle cx="9" cy="20" r="1.4"></circle><circle
-							cx="18"
-							cy="20"
-							r="1.4"></circle><path d="M2 3h3l2.4 12h11L21 7H6"
-						></path></svg
+						><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3l2.4 12h11L21 7H6"></path></svg
 					>
 				</a>
-				<a href="/signin"> Sign in </a>
-				<a href="/signup"> Start creating </a>
+				<a href="/signin" class="hidden text-sm font-semibold hover:text-coral md:inline">Sign in</a>
+				<a
+					href="/signup"
+					class="sticker hidden rounded-full bg-ink px-4 py-2 text-sm font-bold text-paper transition-all hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none md:inline-block"
+				>
+					Start creating
+				</a>
+				<label for="nav-toggle" aria-hidden="true" class="sticker grid h-9 w-9 cursor-pointer place-items-center rounded-full bg-white md:hidden">
+					<svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"
+						><path d="M4 7h16M4 12h16M4 17h16"></path></svg
+					>
+				</label>
 			</div>
 		</div>
+
+		<!-- mobile menu — CSS-only, toggled by the peer checkbox above -->
+		<nav class="hidden border-t-2 border-ink bg-paper peer-checked/nav:block md:hidden">
+			<div class="mx-auto grid max-w-6xl gap-1 px-5 py-3 text-sm font-bold">
+				{
+					nav.map(item => (
+						<a href={item.href} class={`rounded-lg px-3 py-2 hover:bg-paper-2 ${isActive(item.href) ? 'text-coral' : ''}`}>
+							{item.label}
+						</a>
+					))
+				}
+				<a href="/signin" class="rounded-lg px-3 py-2 hover:bg-paper-2">Sign in</a>
+				<a href="/signup" class="sticker mt-1 rounded-full bg-coral px-4 py-2.5 text-center text-white">Start creating</a>
+			</div>
+		</nav>
 	</header>
 
-	<main class="mx-auto max-w-5xl p-6">
+	<main>
 		<slot />
 	</main>
+
+	<!-- ── Footer ─────────────────────────────────────────── -->
+	<footer class="border-t-2 border-ink bg-ink text-paper">
+		<div class="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="sm:col-span-2 lg:col-span-1">
+				<Logo tone="paper" />
+				<p class="mt-4 max-w-xs text-sm text-paper/70">Generate it. Print it. Get paid. A community marketplace for AI-made merch.</p>
+			</div>
+
+			<div>
+				<h3 class="font-display text-sm font-bold uppercase tracking-wider text-yellow">Marketplace</h3>
+				<ul class="mt-4 space-y-2.5 text-sm text-paper/75">
+					<li>
+						<a href="/browse" class="hover:text-white">Browse designs</a>
+					</li>
+					<li>
+						<a href="/browse?sort=trending" class="hover:text-white">Trending</a>
+					</li>
+					<li>
+						<a href="/pricing" class="hover:text-white">Pricing &amp; credits</a>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="font-display text-sm font-bold uppercase tracking-wider text-yellow">Makers</h3>
+				<ul class="mt-4 space-y-2.5 text-sm text-paper/75">
+					<li>
+						<a href="/how-it-works" class="hover:text-white">How it works</a>
+					</li>
+					<li>
+						<a href="/signup" class="hover:text-white">Start creating</a>
+					</li>
+					<li>
+						<a href="/signin" class="hover:text-white">Sign in</a>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="font-display text-sm font-bold uppercase tracking-wider text-yellow">Shop</h3>
+				<ul class="mt-4 space-y-2.5 text-sm text-paper/75">
+					<li>
+						<a href="/browse?product=sticker" class="hover:text-white">Stickers</a>
+					</li>
+					<li>
+						<a href="/browse?product=tee" class="hover:text-white">Tees</a>
+					</li>
+					<li>
+						<a href="/browse?product=mug" class="hover:text-white">Mugs</a>
+					</li>
+					<li>
+						<a href="/browse?product=poster" class="hover:text-white">Posters</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="border-t border-paper/15">
+			<div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs text-paper/55 sm:flex-row sm:items-center sm:justify-between">
+				<p>© 2026 Print Shop · A teaching project. Designs &amp; prices are placeholders.</p>
+				<p class="font-mono">Astro + Tailwind · design sandbox</p>
+			</div>
+		</div>
+	</footer>
 </BaseLayout>
