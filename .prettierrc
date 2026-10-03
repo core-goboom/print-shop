@@ -1,5 +1,11 @@
 {
 	"printWidth": 160,
+	"useTabs": true,
+	"tabWidth": 4,
+	"singleQuote": true,
+	"semi": true,
+	"arrowParens": "avoid",
+	"endOfLine": "lf",
 	"overrides": [
 		{
 			"files": "*.md",
